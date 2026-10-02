@@ -1,0 +1,266 @@
+basePath: /
+definitions:
+  cashflow-manager_internal_model.Entry:
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      confirmed:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      due_date:
+        type: string
+      expect_receipt_date:
+        type: string
+      id:
+        type: integer
+      paid_at:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+    type: object
+  internal_handler.AtualizarOrcamentoReposicaoRequest:
+    properties:
+      orcamento_reposicao:
+        type: number
+    type: object
+  internal_handler.CriarLancamentoRequest:
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      confirmed:
+        type: boolean
+      description:
+        type: string
+      due_date:
+        type: string
+      expect_receipt_date:
+        type: string
+      type:
+        type: string
+    type: object
+  internal_handler.FaturamentoEsperadoResponse:
+    properties:
+      dias:
+        type: integer
+      faturamento_esperado:
+        type: number
+    type: object
+  internal_handler.LancamentoResponse:
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      confirmed:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      due_date:
+        type: string
+      expect_receipt_date:
+        type: string
+      id:
+        type: integer
+      paid_at:
+        type: string
+      status:
+        type: string
+      type:
+        type: string
+    type: object
+  internal_handler.OrcamentoReposicaoResponse:
+    properties:
+      orcamento_reposicao:
+        type: number
+    type: object
+  internal_handler.SaldoLiquidoResponse:
+    properties:
+      dias:
+        type: integer
+      saldo_liquido:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API para gestão de fluxo de caixa com relatórios de saldo líquido e
+    faturamento esperado.
+  title: CashFlow Manager API
+  version: "1.0"
+paths:
+  /configuracoes/orcamento-reposicao:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.OrcamentoReposicaoResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Obter orçamento de reposição
+      tags:
+      - configuracoes
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.AtualizarOrcamentoReposicaoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.OrcamentoReposicaoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Atualizar orçamento de reposição
+      tags:
+      - configuracoes
+  /lancamentos:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/internal_handler.LancamentoResponse'
+              type: array
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Listar lançamentos
+      tags:
+      - lancamentos
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Dados do lançamento
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.CriarLancamentoRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handler.LancamentoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Criar lançamento
+      tags:
+      - lancamentos
+  /relatorios/faturamento-esperado:
+    get:
+      parameters:
+      - description: Quantidade de dias do horizonte
+        in: query
+        name: dias
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.FaturamentoEsperadoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Obter faturamento esperado
+      tags:
+      - relatorios
+  /relatorios/saldo-liquido:
+    get:
+      parameters:
+      - description: Quantidade de dias do horizonte
+        in: query
+        name: dias
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.SaldoLiquidoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Obter saldo líquido
+      tags:
+      - relatorios
+  /relatorios/vencidos:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/cashflow-manager_internal_model.Entry'
+              type: array
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Listar lançamentos vencidos
+      tags:
+      - relatorios
+swagger: "2.0"

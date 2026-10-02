@@ -1,0 +1,408 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API para gestão de fluxo de caixa com relatórios de saldo líquido e faturamento esperado.",
+        "title": "CashFlow Manager API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/configuracoes/orcamento-reposicao": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "configuracoes"
+                ],
+                "summary": "Obter orçamento de reposição",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.OrcamentoReposicaoResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "configuracoes"
+                ],
+                "summary": "Atualizar orçamento de reposição",
+                "parameters": [
+                    {
+                        "description": "Payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.AtualizarOrcamentoReposicaoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.OrcamentoReposicaoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/lancamentos": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lancamentos"
+                ],
+                "summary": "Listar lançamentos",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/internal_handler.LancamentoResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lancamentos"
+                ],
+                "summary": "Criar lançamento",
+                "parameters": [
+                    {
+                        "description": "Dados do lançamento",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.CriarLancamentoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.LancamentoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/relatorios/faturamento-esperado": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "relatorios"
+                ],
+                "summary": "Obter faturamento esperado",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Quantidade de dias do horizonte",
+                        "name": "dias",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.FaturamentoEsperadoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/relatorios/saldo-liquido": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "relatorios"
+                ],
+                "summary": "Obter saldo líquido",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Quantidade de dias do horizonte",
+                        "name": "dias",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.SaldoLiquidoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/relatorios/vencidos": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "relatorios"
+                ],
+                "summary": "Listar lançamentos vencidos",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/cashflow-manager_internal_model.Entry"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "cashflow-manager_internal_model.Entry": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "confirmed": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "due_date": {
+                    "type": "string"
+                },
+                "expect_receipt_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "paid_at": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.AtualizarOrcamentoReposicaoRequest": {
+            "type": "object",
+            "properties": {
+                "orcamento_reposicao": {
+                    "type": "number"
+                }
+            }
+        },
+        "internal_handler.CriarLancamentoRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "confirmed": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "due_date": {
+                    "type": "string"
+                },
+                "expect_receipt_date": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.FaturamentoEsperadoResponse": {
+            "type": "object",
+            "properties": {
+                "dias": {
+                    "type": "integer"
+                },
+                "faturamento_esperado": {
+                    "type": "number"
+                }
+            }
+        },
+        "internal_handler.LancamentoResponse": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "confirmed": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "due_date": {
+                    "type": "string"
+                },
+                "expect_receipt_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "paid_at": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.OrcamentoReposicaoResponse": {
+            "type": "object",
+            "properties": {
+                "orcamento_reposicao": {
+                    "type": "number"
+                }
+            }
+        },
+        "internal_handler.SaldoLiquidoResponse": {
+            "type": "object",
+            "properties": {
+                "dias": {
+                    "type": "integer"
+                },
+                "saldo_liquido": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}
