@@ -29,7 +29,7 @@ func (s *RelatorioService) SaldoLiquido(ctx context.Context, dias int) (float64,
 		return 0, fmt.Errorf("dias deve ser maior ou igual a zero")
 	}
 
-	inicio := time.Now().Truncate(24 * time.Hour)
+	inicio := inicioDoDia(time.Now())
 	fim := inicio.AddDate(0, 0, dias)
 
 	receitas, err := s.somarPorFiltro(ctx, repository.FiltroLancamento{
@@ -63,7 +63,7 @@ func (s *RelatorioService) FaturamentoEsperado(ctx context.Context, dias int) (f
 		return 0, fmt.Errorf("dias deve ser maior ou igual a zero")
 	}
 
-	inicio := time.Now().Truncate(24 * time.Hour)
+	inicio := inicioDoDia(time.Now())
 	fim := inicio.AddDate(0, 0, dias)
 
 	orcamentoReposicao, err := s.configuracaoRepository.ObterOrcamentoReposicao(ctx)
@@ -128,4 +128,8 @@ func (s *RelatorioService) ListarVencidos(ctx context.Context) ([]model.Entry, e
 
 func datePtr(t time.Time) *time.Time {
 	return &t
+}
+
+func inicioDoDia(data time.Time) time.Time {
+	return time.Date(data.Year(), data.Month(), data.Day(), 0, 0, 0, 0, data.Location())
 }

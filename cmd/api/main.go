@@ -22,7 +22,7 @@ import (
 func main() {
 	dsn := os.Getenv("DATABASE_DSN")
 	if dsn == "" {
-		dsn = "root:root@tcp(localhost:3306)/cashflow_manager?parseTime=true"
+		log.Fatal("DATABASE_DSN must be set")
 	}
 
 	db, err := database.NewDatabase(dsn)
